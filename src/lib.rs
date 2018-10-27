@@ -1,30 +1,26 @@
-#![feature(plugin)]
-
 extern crate bincode;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 
-use bincode::deserialize_from;
-use std::io::Write;
 use bincode::{deserialize, serialize};
-use serde::Serialize;
 use serde::de::DeserializeOwned;
-use serde::de::*;
+use serde::Serialize;
+use std::io::Write;
 
-use std::time::Instant;
 use std::collections::HashMap;
 use std::hash::Hash;
+use std::time::Instant;
 
-use std::io::{BufReader, BufWriter, Seek, SeekFrom};
-use std::fs::{File, OpenOptions};
 use std::fmt::Debug;
+use std::fs::{File, OpenOptions};
+use std::io::{BufReader, BufWriter, Seek, SeekFrom};
 
 use std::result::Result;
 
-use std::thread;
-use std::sync::mpsc::*;
 use std::io::ErrorKind;
+use std::sync::mpsc::*;
+use std::thread;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum Op<T, U> {
@@ -78,7 +74,7 @@ where
             let now = Instant::now();
             let mut count = 0;
             let mut read = true;
-            while(read) {
+            while (read) {
                 let mut bytes: [u8; 4] = [0, 0, 0, 0];
                 match file.read_exact(&mut bytes) {
                     Ok(_) => {
@@ -102,12 +98,12 @@ where
                         } else {
                             println!("failed to deserialize");
                         }
-                    },
-                    Err(err) =>  {
+                    }
+                    Err(err) => {
                         if err.kind() == ErrorKind::UnexpectedEof {
-                            println!("end of file {}",count);
+                            println!("end of file {}", count);
                             read = false;
-                        }else{
+                        } else {
                             panic!("failed to read {} {:?}", count, err);
                         }
                     }
@@ -172,7 +168,7 @@ struct Email {
 fn it_works() {
     thread::spawn(move || {
         let mut data_map = StorageMap::<u32, Email>::new("/test2129".to_string()).unwrap();
-        println!("INIIIIIIIIIIIIIT {:?}",data_map.data);
+        println!("INIIIIIIIIIIIIIT {:?}", data_map.data);
         if let Some(val) = data_map.data.get(&334) {
             println!("Value: {:?}", val.email);
         }
